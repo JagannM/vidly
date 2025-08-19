@@ -1,16 +1,14 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const genres = require("./routes/g1.js");
 const customers = require("./routes/cr.js");
 const express = require("express");
 const app = express();
 
 mongoose
-  .connect("mongodb://localhost:27017/vidly")
+  .connect("mongodb://localhost:27017/customerinfo")
   .then(() => console.log("DB connected successfully"))
   .catch((err) => console.error("could not connect", err));
 
-app.use("/api/genres", genres);
 app.use("/api/customers", customers);
 
 app.use(express.json());

@@ -2,7 +2,7 @@ const { required } = require("joi");
 const mongoose = require("mongoose");
 
 mongoose
-  .connect("mongodb://localhost/playground")
+  .connect("mongodb://localhost/emtest")
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
@@ -11,7 +11,6 @@ const authorSchema = new mongoose.Schema({
   bio: String,
   website: String,
 });
-
 const Author = mongoose.model("Author", authorSchema);
 
 const Course = mongoose.model(
@@ -32,25 +31,27 @@ async function createCourse(name, authors) {
   console.log(result);
 }
 
-async function listCourses() {
-  const courses = await Course.find();
-  console.log(courses);
-}
-
 async function updateAuthor(courseId) {
-  const course = await Course.findById(courseId);
-  course.authors.name = "madhu";
-  course.save();
-  /*  const course = await Course.updateOne(
+  /*  const course = await Course.findById(courseId);
+  course.author.name = "Madhumitha";
+  course.save(); */
+  const course = await Course.updateOne(
     { _id: courseId },
-    { $set: { "course.author.name": "madhu" } }
+    { $set: { "author.name": "hazel" } }
     //{ $unset: { author: "" } }
-  ); */
+  );
 }
 
-async function addAuthor(courseId, authors) {
+async function addAuthor(courseId, author) {
   const course = await Course.findById(courseId);
-  course.authors.push(authors);
+  course.authors.push(author);
+  course.save();
+}
+
+async function updatearr(courseId, authorId) {
+  const course = await Course.findById(courseId);
+  const author = course.authors.id(authorId);
+  author.name = "Hazel";
   course.save();
 }
 
@@ -61,13 +62,15 @@ async function removeAuthor(courseId, authorId) {
   course.save();
 }
 
-updateAuthor("68aa75c4f09a9920236cbbd6");
+updatearr("68aa7b749be38957a8baf9c6", "68aa7b749be38957a8baf9c4");
 
-/* createCourse("Node Course", [
-  new Author({ name: "Mosh" }),
-  new Author({ name: "Jagan" }),
+//removeAuthor("68aa7b749be38957a8baf9c6", "68aa86423dd05ce5e01d74c9");
+
+//addAuthor("68aa7b749be38957a8baf9c6", new Author({ name: "Hazel" }));
+
+//updateAuthor("68aa79f4b1297c0777f90eb3");
+
+/* createCourse("C1", [
+  new Author({ name: "Uthara" }),
+  new Author({ name: "Yasha" }),
 ]); */
-
-//addAuthor("68a704617621a456ca4e11e5", new Author({ name: "madhu" }));
-
-//removeAuthor("68a704617621a456ca4e11e5", "68a704617621a456ca4e11e3");
